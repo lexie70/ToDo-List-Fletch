@@ -7,39 +7,48 @@ const Home = () => {
 	const [todo,setTodo]= useState("")
 	const [list,setList]= useState([])
 	
-	// const borrarLista = ()=>{
-	// 	fetch('https://assets.breatheco.de/apis/fake/todos/user/alesanchezr', {
-    //   method: "PUT",
-    //   body: JSON.stringify(todos),
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // })
-    // .then(resp => {
-    //     console.log(resp.ok); // will be true if the response is successfull
-    //     console.log(resp.status); // the status code = 200 or code = 400 etc.
-    //     console.log(resp.text()); // will try return the exact result as string
-    //     return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
-    // })
-    // .then(data => {
-    //     //here is were your code should start after the fetch finishes
-    //     console.log(data); //this will print on the console the exact object received from the server
-    // })
-    // .catch(error => {
-    //     //error handling
-    //     console.log(error);
-    // });
-	// };
 
-	const rickAndMorty = ()=>{
-		fetch('https://rickandmortyapi.com/api/character')
+	const getToDo = ()=>{
+		fetch('https://assets.breatheco.de/apis/fake/todos/user/alexandra',{
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
   		.then(response => response.json())
-  		.then(data => console.log(data.results.map((item) => item.name )))
+  		.then(data => setList([...list, data[0].label]))
 	}
 
 	useEffect(() =>{
-		rickAndMorty()
+		getToDo()
 	},[])
+	
+	useEffect(() =>{
+		fetch('https://assets.breatheco.de/apis/fake/todos/user/alexandra', 
+		{
+			method: "PUT",
+			body: JSON.stringify(list),
+			headers: {
+			  "Content-Type": "application/json"
+			}}
+			)
+		  .then(resp => {
+			  console.log(resp.ok); // will be true if the response is successfull
+			  console.log(resp.status); // the status code = 200 or code = 400 etc.
+			  console.log(resp.text()); // will try return the exact result as string
+			  return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+		  })
+		  .then(data => {
+			  //here is were your code should start after the fetch finishes
+			  console.log(data); //this will print on the console the exact object received from the server
+		  })
+		  .catch(error => {
+			  //error handling
+			  console.log(error);
+		  });
+	},[list])
+
+
 
 	
 	// preventDefault ignora comportamiento de etiquetas predeterminadas
